@@ -7,6 +7,7 @@ const lang = {
   'Login.Code.SentInApp': 'We have sent you a message in Telegram\nwith the code.',
   'Login.Code.SentCall': 'We will call you and dictate\nthe code.',
   'Login.Code.SentUnknown': 'Please check everything\nfor a code (type: %s)',
+  'Login.GroupId': 'Group ID',
   'Login.Password.Title': 'Enter Your Password',
   'Login.Password.Subtitle': 'Your account is protected with\nan additional password',
   'Login.Register.Subtitle': 'Enter your name and add\na profile photo',

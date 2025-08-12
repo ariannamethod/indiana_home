@@ -33,6 +33,10 @@ const onFirstMount = () => {
     'requestVideoFrameCallback' in HTMLVideoElement.prototype ? Promise.resolve() : import('../helpers/dom/requestVideoFrameCallbackPolyfill')
   ]).then(([appDialogsManager]) => {
     appDialogsManager.default.start();
+    const groupId = rootScope.selectedGroupId;
+    if(groupId) {
+      rootScope.managers.appImManager.open({peerId: groupId.toPeerId(true)});
+    }
     document.body.classList.remove('has-auth-pages');
     setTimeout(() => {
       document.getElementById('auth-pages').remove();

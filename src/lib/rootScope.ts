@@ -240,6 +240,7 @@ export class RootScope extends EventListenerBase<BroadcastEventsListeners> {
   public settings: StateSettings;
   public managers: AppManagers;
   public premium: boolean;
+  public selectedGroupId?: number;
 
   constructor() {
     super();
