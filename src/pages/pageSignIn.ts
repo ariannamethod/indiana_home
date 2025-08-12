@@ -27,6 +27,7 @@ import CountryInputField from '../components/countryInputField';
 import {getCurrentAccount} from '../lib/accounts/getCurrentAccount';
 import AccountController from '../lib/accounts/accountController';
 import commonStateStorage from '../lib/commonStateStorage';
+import {setGroupId} from '../stores/group';
 
 // import _countries from '../countries_pretty.json';
 let btnNext: HTMLButtonElement = null, btnQr: HTMLButtonElement;
@@ -99,6 +100,10 @@ const onFirstMount = () => {
   });
 
   const telEl = telInputField.input;
+  const groupInput = document.createElement('input');
+  groupInput.type = 'text';
+  groupInput.placeholder = 'Group ID';
+  groupInput.classList.add('input-field');
 
   telEl.addEventListener('keypress', (e) => {
     // console.log('keypress', this.value);
@@ -127,6 +132,14 @@ const onFirstMount = () => {
     // return;
 
     const phone_number = telInputField.value;
+    const groupIdValue = Number(groupInput.value);
+    if(!groupIdValue) {
+      groupInput.classList.add('error');
+      toggle();
+      replaceContent(btnNext, i18n('Login.Next'));
+      return;
+    }
+    setGroupId(groupIdValue as PeerId);
     rootScope.managers.apiManager.invokeApi('auth.sendCode', {
       phone_number: phone_number,
       api_id: App.id,
@@ -197,7 +210,7 @@ const onFirstMount = () => {
     }); */
   });
 
-  inputWrapper.append(countryInputField.container, telInputField.container, btnNext, btnQr);
+  inputWrapper.append(countryInputField.container, telInputField.container, groupInput, btnNext, btnQr);
 
   const h4 = document.createElement('h4');
   h4.classList.add('text-center');
