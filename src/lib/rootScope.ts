@@ -240,6 +240,7 @@ export class RootScope extends EventListenerBase<BroadcastEventsListeners> {
   public settings: StateSettings;
   public managers: AppManagers;
   public premium: boolean;
+  public groupId?: PeerId;
 
   constructor() {
     super();
@@ -247,6 +248,7 @@ export class RootScope extends EventListenerBase<BroadcastEventsListeners> {
     this.myId = NULL_PEER_ID;
     this.connectionStatus = {};
     this.premium = false;
+    this.groupId = undefined;
 
     this.addEventListener('user_auth', ({id}) => {
       this.myId = id.toPeerId();

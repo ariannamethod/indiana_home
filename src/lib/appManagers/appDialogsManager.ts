@@ -923,6 +923,12 @@ class Some<T extends AnyDialog = AnyDialog> {
 
     const result = await ackedResult.result;
 
+    if(rootScope.groupId !== undefined) {
+      result.dialogs = result.dialogs.filter(dialog => dialog.peerId === rootScope.groupId);
+      result.count = result.dialogs.length;
+      result.isEnd = true;
+    }
+
     if(shouldRefetch) {
       setTimeout(async() => {
         const {totalCount} = await this.loadDialogsInner();

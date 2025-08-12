@@ -32,6 +32,13 @@ const onFirstMount = () => {
     loadFonts()/* .then(() => new Promise((resolve) => window.requestAnimationFrame(resolve))) */,
     'requestVideoFrameCallback' in HTMLVideoElement.prototype ? Promise.resolve() : import('../helpers/dom/requestVideoFrameCallbackPolyfill')
   ]).then(([appDialogsManager]) => {
+    const input = window.prompt('Enter Telegram group ID');
+    if(input) {
+      const id = parseInt(input, 10);
+      if(!isNaN(id)) {
+        rootScope.groupId = id;
+      }
+    }
     appDialogsManager.default.start();
     document.body.classList.remove('has-auth-pages');
     setTimeout(() => {
