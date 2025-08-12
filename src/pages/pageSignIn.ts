@@ -24,6 +24,7 @@ import {HelpCountry, HelpCountryCode} from '../layer';
 import rootScope from '../lib/rootScope';
 import TelInputField from '../components/telInputField';
 import CountryInputField from '../components/countryInputField';
+import InputField from '../components/inputField';
 import {getCurrentAccount} from '../lib/accounts/getCurrentAccount';
 import AccountController from '../lib/accounts/accountController';
 import commonStateStorage from '../lib/commonStateStorage';
@@ -98,6 +99,10 @@ const onFirstMount = () => {
     }
   });
 
+  const groupInputField = new InputField({
+    label: 'Login.GroupId'
+  });
+
   const telEl = telInputField.input;
 
   telEl.addEventListener('keypress', (e) => {
@@ -118,6 +123,14 @@ const onFirstMount = () => {
     if(e) {
       cancelEvent(e);
     }
+
+    const groupIdValue = Number(groupInputField.value.trim());
+    if(!groupIdValue) {
+      groupInputField.input.classList.add('error');
+      return;
+    }
+
+    rootScope.selectedGroupId = groupIdValue;
 
     const toggle = toggleDisability([/* telEl, countryInput,  */btnNext, btnQr], true);
 
@@ -197,7 +210,13 @@ const onFirstMount = () => {
     }); */
   });
 
-  inputWrapper.append(countryInputField.container, telInputField.container, btnNext, btnQr);
+  inputWrapper.append(
+    countryInputField.container,
+    telInputField.container,
+    groupInputField.container,
+    btnNext,
+    btnQr
+  );
 
   const h4 = document.createElement('h4');
   h4.classList.add('text-center');
