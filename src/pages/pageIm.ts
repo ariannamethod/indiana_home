@@ -9,6 +9,7 @@ import loadFonts from '../helpers/dom/loadFonts';
 import I18n from '../lib/langPack';
 import rootScope from '../lib/rootScope';
 import Page from './page';
+import {APP_TABS} from '../lib/appManagers/appImManager';
 
 const onFirstMount = () => {
   rootScope.managers.appStateManager.pushToState('authState', {_: 'authStateSignedIn'});
@@ -31,12 +32,29 @@ const onFirstMount = () => {
     import('../lib/appManagers/appDialogsManager'),
     loadFonts()/* .then(() => new Promise((resolve) => window.requestAnimationFrame(resolve))) */,
     'requestVideoFrameCallback' in HTMLVideoElement.prototype ? Promise.resolve() : import('../helpers/dom/requestVideoFrameCallbackPolyfill')
-  ]).then(([appDialogsManager]) => {
+  ]).then(async([appDialogsManager]) => {
     appDialogsManager.default.start();
     document.body.classList.remove('has-auth-pages');
     setTimeout(() => {
       document.getElementById('auth-pages').remove();
     }, 1e3);
+
+    const {getGroupId} = await import('../stores/group');
+    const groupId = getGroupId();
+    if(groupId) {
+      const im = rootScope.managers.appImManager;
+      const originalSetPeer = im.setPeer.bind(im);
+      im.setPeer = (options: any = {}, animate?: boolean) => {
+        if(options.peerId && options.peerId !== groupId) {
+          options.peerId = groupId;
+        }
+        return originalSetPeer(options, animate);
+      };
+      im.setPeer({peerId: groupId});
+      im.selectTab(APP_TABS.CHAT);
+      document.getElementById('column-left')?.remove();
+      document.getElementById('column-right')?.remove();
+    }
   });
 };
 
